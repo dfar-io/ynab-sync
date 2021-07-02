@@ -6,6 +6,9 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "playwright": "^1.12.3",
+    "playwright-chromium": "^1.12.3"
+  },
   "devDependencies": {}
 }

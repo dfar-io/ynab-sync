@@ -8,3 +8,24 @@ FROM mcr.microsoft.com/azure-functions/node:3.0-node${VARIANT}-core-tools
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 
+# Playwright dependencies
+RUN sudo apt-get update \
+    && sudo apt-get install -y libnss3\
+          libnspr4\
+          libatk1.0-0\
+          libatk-bridge2.0-0\
+          libcups2\
+          libdrm2\
+          libxkbcommon0\
+          libxcomposite1\
+          libxdamage1\
+          libxfixes3\
+          libxrandr2\
+          libgbm1\
+          libgtk-3-0\
+          libpango-1.0-0\
+          libcairo2\
+          libgdk-pixbuf2.0-0\
+          libasound2\
+          libatspi2.0-0\
+          libxshmfence-dev
