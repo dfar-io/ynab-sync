@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "test": "echo \"No tests yet...\"",
+    "postinstall": "rm -f meta.txt && git rev-parse HEAD >> meta.txt && date >> meta.txt"
   },
   "dependencies": {
     "playwright": "^1.12.3",

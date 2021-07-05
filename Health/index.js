@@ -1,6 +1,22 @@
+const fs = require('fs')
+
 module.exports = async function (context) {
-    context.res = {
-        // status: 200, /* Defaults to 200 */
-        body: "YNAB Sync is running."
-    };
+    try {
+        const data = fs.readFileSync('meta.txt', 'utf8').split('\n');
+        const sha = data[0];
+        context.res = {
+            // status: 200, /* Defaults to 200 */
+            body: {
+                name: "YNAB Sync",
+                sha: sha,
+                shaLink: `https://github.com/dfar-io/ynab-sync/commit/${sha}`,
+                date: data[1]
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+    } catch (err) {
+        console.error(err)
+    }
 }
