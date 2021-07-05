@@ -5,7 +5,7 @@
   "scripts": {
     "start": "func start",
     "test": "echo \"No tests yet...\"",
-    "postinstall": "rm -f meta.txt && git rev-parse HEAD >> meta.txt && date >> meta.txt"
+    "postinstall": "sh ./get_metadata.sh"
   },
   "dependencies": {
     "playwright": "^1.12.3",

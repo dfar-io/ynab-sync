@@ -8,9 +8,9 @@ module.exports = async function (context) {
             // status: 200, /* Defaults to 200 */
             body: {
                 name: "YNAB Sync",
-                sha: sha,
+                commit: data[1],
                 shaLink: `https://github.com/dfar-io/ynab-sync/commit/${sha}`,
-                date: data[1]
+                date: data[2]
             },
             headers: {
                 'Content-Type': 'application/json'
