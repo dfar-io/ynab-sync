@@ -1,31 +1,21 @@
-# Find the Dockerfile for mcr.microsoft.com/azure-functions/node at the following URLs:
-# Node 10: https://github.com/Azure/azure-functions-docker/blob/dev/host/3.0/buster/amd64/node/node10/node10-core-tools.Dockerfile
-# Node 12: https://github.com/Azure/azure-functions-docker/blob/dev/host/3.0/buster/amd64/node/node12/node12-core-tools.Dockerfile
-ARG VARIANT=12
-FROM mcr.microsoft.com/azure-functions/node:3.0-node${VARIANT}-core-tools
+# See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/ubuntu/.devcontainer/base.Dockerfile
+
+# [Choice] Ubuntu version: bionic, focal
+ARG VARIANT="focal"
+FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 
-# Playwright dependencies
-RUN sudo apt-get update \
-    && sudo apt-get install -y libnss3\
-          libnspr4\
-          libatk1.0-0\
-          libatk-bridge2.0-0\
-          libcups2\
-          libdrm2\
-          libxkbcommon0\
-          libxcomposite1\
-          libxdamage1\
-          libxfixes3\
-          libxrandr2\
-          libgbm1\
-          libgtk-3-0\
-          libpango-1.0-0\
-          libcairo2\
-          libgdk-pixbuf2.0-0\
-          libasound2\
-          libatspi2.0-0\
-          libxshmfence-dev
+# Node 14
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
+    && sudo apt-get install -y nodejs
+
+# Azure Function Core Tools
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
+    && sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg \
+    && sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-$(lsb_release -cs)-prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list' \
+    #DEBIAN && sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/debian/$(lsb_release -rs | cut -d'.' -f 1)/prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list' \
+    && sudo apt-get update \
+    && sudo apt-get install -y azure-functions-core-tools-3

@@ -8,7 +8,6 @@ module.exports = async function (context) {
   await browser.close();
 
   context.res = {
-      // status: 200, /* Defaults to 200 */
       body: "Worked."
   };
 }
