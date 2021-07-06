@@ -30,15 +30,16 @@ jobs:
       run: |
         pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
         npm install
-        npm run build --if-present
-        npm run test --if-present
+        npm run test
         popd
 
     - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
+      uses: Azure/functions-action@v1.3.2
       id: fa
       with:
         app-name: 'ynab-sync'
         slot-name: 'rc'
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_05731f0ce2ad4e1e9e2be2e6ab182b6d }}
+        # used to run npm i on the server
+        scm-do-build-during-deployment: true
