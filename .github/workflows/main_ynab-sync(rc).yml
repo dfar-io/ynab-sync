@@ -41,3 +41,6 @@ jobs:
         slot-name: 'rc'
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_05731f0ce2ad4e1e9e2be2e6ab182b6d }}
+        # Allows for installing playwright chromium
+        scm-do-build-during-deployment: true
+        respect-funcignore: true

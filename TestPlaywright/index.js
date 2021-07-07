@@ -4,10 +4,13 @@ module.exports = async function (context) {
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto('http://whatsmyuseragent.org/');
-  await page.screenshot({ path: `example.png` });
+  const screenshotBuffer = await page.screenshot();
   await browser.close();
 
   context.res = {
-      body: "Worked."
+    body: screenshotBuffer,
+    headers: {
+      "content-type": "image/png"
+    }
   };
 }

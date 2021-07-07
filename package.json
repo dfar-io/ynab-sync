@@ -5,10 +5,9 @@
   "scripts": {
     "start": "func start",
     "test": "echo \"No tests yet...\"",
-    "postinstall": "sh ./setup_playwright.sh && sh ./get_metadata.sh"
+    "postinstall": "sh ./get_metadata.sh && npx playwright install-deps"
   },
   "dependencies": {
-    "playwright": "^1.12.3",
     "playwright-chromium": "^1.12.3"
   },
   "devDependencies": {}
