@@ -25,13 +25,9 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    - name: 'Resolve Project Dependencies Using Npm'
+    - name: 'Gather Metadata'
       shell: bash
-      run: |
-        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        npm install
-        npm run test
-        popd
+      run: ./get_metadata.sh
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1.3.2
