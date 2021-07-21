@@ -21,4 +21,4 @@ jobs:
     - name: Install dependencies
       run: npm i
     - name: Run script
-      run: node main.ts {{ secrets.MORTGAGE_USERNAME }} {{ secrets.MORTGAGE_PASSWORD }}
+      run: node main.ts ${{ secrets.MORTGAGE_USERNAME }} ${{ secrets.MORTGAGE_PASSWORD }}
