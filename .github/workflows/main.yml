@@ -22,3 +22,8 @@ jobs:
       run: npm i
     - name: Run script
       run: node main.ts ${{ secrets.MORTGAGE_USERNAME }} ${{ secrets.MORTGAGE_PASSWORD }}
+    - uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: last-page
+        path: error.png

@@ -23,6 +23,7 @@ if (process.argv.length != 4) {
   } catch (e) {
     if (e.name === 'TimeoutError') {
       console.error('Unable to progress to \'My Info\' page, credentials may be bad.');
+      await page.screenshot({ path: `error.png` });
       process.exit(1);
     }
   }
@@ -34,6 +35,5 @@ if (process.argv.length != 4) {
   const loanBalance = await page.evaluate(el => el.innerText, elements[10]);
   console.log(`Mortgage loan balance is: ${loanBalance}`);
 
-  await page.screenshot({ path: `example.png` });
   await browser.close();
 })();
