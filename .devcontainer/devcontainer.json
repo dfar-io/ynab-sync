@@ -1,5 +1,5 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/ubuntu
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.187.0/containers/ubuntu
 {
 	"name": "Ubuntu",
 	"build": {
@@ -13,16 +13,13 @@
 
 
 	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"ms-azuretools.vscode-azurefunctions",
-		"dbaeumer.vscode-eslint"
-	],
+	"extensions": [],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "rm -rf node_modules && npm i",
+	"postCreateCommand": "rm -rf node_modules && npm i && npm install playwright",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
