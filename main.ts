@@ -22,7 +22,6 @@ if (process.argv.length != 4) {
 
   // Process Security check if required
   var content = await page.content();
-  console.log(content);
   if (content.includes('Enhanced Login Security')) {
     await page.waitForSelector(selector);
     var elements = await page.$$(selector);
@@ -48,7 +47,7 @@ if (process.argv.length != 4) {
   await page.waitForSelector(selector);
   var elements = await page.$$(selector);
   const loanBalance = await page.evaluate(el => el.innerText, elements[10]);
-  console.log(`Mortgage loan balance is: ${loanBalance}`);
+  console.log(`${loanBalance}`);
 
   await browser.close();
 })();
