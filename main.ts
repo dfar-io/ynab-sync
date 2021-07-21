@@ -1,4 +1,5 @@
 const { webkit } = require('playwright');
+const fs = require('fs'); 
 
 if (process.argv.length != 4) {
   console.error('usage: node main.ts <username> <password>');
@@ -22,8 +23,10 @@ if (process.argv.length != 4) {
     await page.click('text=MY INFO');
   } catch (e) {
     if (e.name === 'TimeoutError') {
-      console.error('Unable to progress to \'My Info\' page, credentials may be bad.');
+      console.error('Unable to progress to \'My Info\' page, credentials may be bad, or stuck on security questions.');
       await page.screenshot({ path: `error.png` });
+      const content = await page.content();
+      console.log(content);
       process.exit(1);
     }
   }

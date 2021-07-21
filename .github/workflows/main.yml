@@ -4,6 +4,7 @@ on:
   schedule:
     - cron:  '0 0 * * *'
   workflow_dispatch:
+  push: 'main'
 
 env:
   NODE_VERSION: '16.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
