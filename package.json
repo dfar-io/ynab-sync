@@ -6,5 +6,8 @@
   },
   "devDependencies": {
     "playwright": "^1.12.3"
+  },
+  "dependencies": {
+    "ynab": "^1.25.0"
   }
 }
