@@ -2,7 +2,7 @@ const { webkit } = require('playwright');
 const fs = require('fs'); 
 
 if (process.argv.length != 4) {
-  console.error('usage: node main.ts <username> <password>');
+  console.error('usage: node get_mortgage_balance.ts <username> <password>');
   process.exit(1);
 }
 
