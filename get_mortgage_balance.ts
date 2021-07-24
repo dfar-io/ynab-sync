@@ -1,8 +1,8 @@
 const { webkit } = require('playwright');
 const fs = require('fs'); 
 
-if (process.argv.length != 4) {
-  console.error('usage: node get_mortgage_balance.ts <username> <password>');
+if (process.argv.length != 12) {
+  console.error('usage: node get_mortgage_balance.ts <username> <password> <question_1> <answer_1> <question_2> <answer_2> <question_3> <answer_3> <question_4> <answer_4>');
   process.exit(1);
 }
 
@@ -26,8 +26,10 @@ if (process.argv.length != 4) {
     await page.waitForSelector(selector);
     var elements = await page.$$(selector);
     const question = await page.evaluate(el => el.innerText, elements[5]);
-    console.log(`Security ? is: ${question}`);
-    process.exit(1);
+    const answer = provideSecurityQuestionAnswer(question);
+
+    await page.fill('input[name="answer"]', answer);
+    await page.click('input[type="submit"]');
   }
 
   // Move to My Info page
@@ -51,3 +53,22 @@ if (process.argv.length != 4) {
 
   await browser.close();
 })();
+
+function provideSecurityQuestionAnswer(question) {
+  const question1 = process.argv[4];
+  const answer1 = process.argv[5];
+  const question2 = process.argv[6];
+  const answer2 = process.argv[7];
+  const question3 = process.argv[8];
+  const answer3 = process.argv[9];
+  const question4 = process.argv[10];
+  const answer4 = process.argv[11];
+
+  switch(question.replace(':', '')) {
+    case question1: return answer1;
+    case question2: return answer2;
+    case question3: return answer3;
+    case question4: return answer4;
+    default: throw new Error(`Received unsupported question: ${question}`);
+  }
+}
