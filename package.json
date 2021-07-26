@@ -8,6 +8,7 @@
     "playwright": "^1.12.3"
   },
   "dependencies": {
+    "node-fetch": "^1.7.3",
     "ynab": "^1.25.0"
   }
 }

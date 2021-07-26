@@ -1,5 +1,5 @@
-if (process.argv.length != 4) {
-  console.error('usage: node adjust_mortgage.ts <ynab_access_token> <mortgage_balance>');
+if (process.argv.length != 5) {
+  console.error('usage: node adjust_mortgage.ts <ynab_access_token> <account_name> <balance>');
   process.exit(1);
 }
 
@@ -7,26 +7,28 @@ const ynab = require("ynab");
 const ynabAPI = new ynab.API(process.argv[2]);
 
 (async function() {
+  const accountName = process.argv[3];
+  const providedBalance = parseFloat(process.argv[4]);
+
   const budget = await getBudget();
-  const mortgageAccount = await getMortgageAccount(budget.id);
+  const account = await getAccount(budget.id, accountName);
 
   // Determine adjustment amount
-  const balance = Math.abs(ynab.utils.convertMilliUnitsToCurrencyAmount(mortgageAccount.balance));
-  const providedBalance = parseFloat(process.argv[3]);
-  const adjustmentAmount = balance - providedBalance;
+  const balance = Math.abs(ynab.utils.convertMilliUnitsToCurrencyAmount(account.balance));
+  const adjustmentAmount = providedBalance - balance;
   if (adjustmentAmount === 0)
   {
-    console.log('No difference between balances.');
+    console.log(`${accountName}: No difference between balances.`);
     process.exit(0);
   }
 
   // Create adjustment transaction
-  console.log(`Creating adjustment transaction of $${adjustmentAmount}.`);
+  console.log(`${accountName}: Creating adjustment transaction of $${adjustmentAmount}.`);
   await ynabAPI.transactions.createTransaction(
     budget.id,
     {
       transaction: {
-        account_id: mortgageAccount.id,
+        account_id: account.id,
         date: ynab.utils.getCurrentDateInISOFormat(),
         amount: convertCurrencyToMilliUnits(adjustmentAmount),
         memo: "Adjustment from YNAB-Sync",
@@ -52,11 +54,10 @@ async function getBudget() {
   return budget;
 }
 
-async function getMortgageAccount(budget_id) {
-  const mortgageAccountName = 'Mortgage';
+async function getAccount(budget_id, account_name) {
   const accountsResponse = await ynabAPI.accounts.getAccounts(budget_id);
-  const mortgageAccount = accountsResponse.data.accounts.find(a => a.name === mortgageAccountName);
-  if (mortgageAccount == null) throw new Error(`Unable to find \'${mortgageAccountName}\' account.`);
+  const mortgageAccount = accountsResponse.data.accounts.find(a => a.name === account_name);
+  if (mortgageAccount == null) throw new Error(`Unable to find \'${account_name}\' account.`);
 
   return mortgageAccount;
 }
