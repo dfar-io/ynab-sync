@@ -14,10 +14,11 @@ answer_4=${11}
 car_api_key=${12}
 vin1=${13}
 vin2=${14}
+home_url=${15}
 
-if [ $# -ne 14 ]
+if [ $# -ne 15 ]
   then
-    echo "usage: ./run.sh <mortgage_username> <mortgage_password> <ynab_access_token> <q1> <a1> <q2> <a2> <q3> <a3> <q4> <a4> <car_api_key> <vin1> <vin2>"
+    echo "usage: ./run.sh <mortgage_username> <mortgage_password> <ynab_access_token> <q1> <a1> <q2> <a2> <q3> <a3> <q4> <a4> <car_api_key> <vin1> <vin2> <home_url>"
     exit 1
 fi
 
@@ -40,7 +41,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+home_value=$(node get_home_value.ts $home_url)
+if [ $? -ne 0 ]; then
+  echo $home_value
+  exit 1
+fi
+
 # Make adjustments
 node adjust_ynab_account.ts $ynab_access_token Mortgage $mortgage_balance
 node adjust_ynab_account.ts $ynab_access_token CX-3 $car1_value
 node adjust_ynab_account.ts $ynab_access_token Stelvio $car2_value
+node adjust_ynab_account.ts $ynab_access_token Home $home_value

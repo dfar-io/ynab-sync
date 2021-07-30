@@ -24,4 +24,4 @@ jobs:
     - name: Install dependencies
       run: npm i
     - name: Run script
-      run: ./run.sh ${{ secrets.MORTGAGE_USERNAME }} ${{ secrets.MORTGAGE_PASSWORD }} ${{ secrets.YNAB_ACCESS_TOKEN }} "${{ secrets.Q1 }}" ${{ secrets.A1 }} "${{ secrets.Q2 }}" ${{ secrets.A2 }} "${{ secrets.Q3 }}" ${{ secrets.A3 }} "${{ secrets.Q4 }}" ${{ secrets.A4 }} ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }} ${{ secrets.VIN2 }}
+      run: ./run.sh ${{ secrets.MORTGAGE_USERNAME }} ${{ secrets.MORTGAGE_PASSWORD }} ${{ secrets.YNAB_ACCESS_TOKEN }} "${{ secrets.Q1 }}" ${{ secrets.A1 }} "${{ secrets.Q2 }}" ${{ secrets.A2 }} "${{ secrets.Q3 }}" ${{ secrets.A3 }} "${{ secrets.Q4 }}" ${{ secrets.A4 }} ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }} ${{ secrets.VIN2 }} ${{ secrets.HOME_URL }}
