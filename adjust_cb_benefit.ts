@@ -1,4 +1,4 @@
-if (process.argv.length != 3 && process.argv.length != 4) {
+if (process.argv.length != 3) {
   console.error('usage: node adjust_cbg_benefit.ts <ynab_access_token> <dry_run_flag>');
   process.exit(1);
 }
@@ -18,10 +18,6 @@ const ynabAPI = new ynab.API(process.argv[2]);
 
   // Create adjustment transaction
   console.log(`${accountName}: Creating adjustment transaction of $${adjustmentAmount}.`);
-  if (process.argv[3] != '') {
-    console.log(`${accountName}: Dry run - exiting.`);
-    process.exit(0);
-  }
   await ynabAPI.transactions.createTransaction(
     budget.id,
     {
