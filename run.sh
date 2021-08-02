@@ -52,3 +52,4 @@ node adjust_ynab_account.ts $ynab_access_token Mortgage $mortgage_balance
 node adjust_ynab_account.ts $ynab_access_token CX-3 $car1_value
 node adjust_ynab_account.ts $ynab_access_token Stelvio $car2_value
 node adjust_ynab_account.ts $ynab_access_token Home $home_value
+node adjust_cb_benefit.ts $ynab_access_token
