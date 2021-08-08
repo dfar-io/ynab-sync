@@ -1,12 +1,9 @@
-name: Run YNAB Sync jobs
+name: Monthly
 
 on:
   schedule:
     - cron:  '0 0 1 * *'
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 env:
   NODE_VERSION: '16.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
@@ -23,5 +20,9 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: Install dependencies
       run: npm i
-    - name: Run script
-      run: ./run.sh ${{ secrets.MORTGAGE_USERNAME }} ${{ secrets.MORTGAGE_PASSWORD }} ${{ secrets.YNAB_ACCESS_TOKEN }} "${{ secrets.Q1 }}" ${{ secrets.A1 }} "${{ secrets.Q2 }}" ${{ secrets.A2 }} "${{ secrets.Q3 }}" ${{ secrets.A3 }} "${{ secrets.Q4 }}" ${{ secrets.A4 }} ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }} ${{ secrets.VIN2 }} ${{ secrets.HOME_URL }}
+    - name: Adjust Corgibytes benefit
+      run: node adjust_cb_benefit.ts ${{ secrets.YNAB_ACCESS_TOKEN }}
+    - name: Adjust car values
+      run: |
+        cx3_car_value = $(node get_car_value.ts 1234) 
+        node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 

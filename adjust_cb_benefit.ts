@@ -1,5 +1,5 @@
 if (process.argv.length != 3) {
-  console.error('usage: node adjust_cbg_benefit.ts <ynab_access_token> <dry_run_flag>');
+  console.error('usage: node adjust_cbg_benefit.ts <ynab_access_token>');
   process.exit(1);
 }
 

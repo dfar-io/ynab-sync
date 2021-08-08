@@ -1,12 +1,9 @@
-name: Adjust LLC Payments
+name: Daily
 
 on:
   schedule:
     - cron:  '0 0 * * *'
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 env:
   NODE_VERSION: '16.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
@@ -23,5 +20,5 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: Install dependencies
       run: npm i
-    - name: Run script
+    - name: Adjust LLC Taxes
       run: node adjust_llc_taxes.ts ${{ secrets.YNAB_ACCESS_TOKEN }}
