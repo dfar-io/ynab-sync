@@ -1,12 +1,16 @@
+// When running this in non-prod, you may want to set up a
+// .env file to simulate the required environment files.
+
 const { webkit } = require('playwright');
 const fs = require('fs'); 
 
-if (process.argv.length != 12) {
-  console.error('usage: node get_mortgage_balance.ts <username> <password> <question_1> <answer_1> <question_2> <answer_2> <question_3> <answer_3> <question_4> <answer_4>');
-  process.exit(1);
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
 }
 
 (async () => {
+  const envVars = getEnvVars();
+
   const selector = 'td.dcolor';
 
   const browser = await webkit.launch();
@@ -14,10 +18,8 @@ if (process.argv.length != 12) {
   await page.goto('https://www.webpmt.com/cgi-bin/customers/clogin.pl');
 
   // Login
-  const username = process.argv[2];
-  const password = process.argv[3];
-  await page.fill('#loannumber', username);
-  await page.fill('#password', password);
+  await page.fill('#loannumber', envVars.MORTGAGE_USERNAME);
+  await page.fill('#password', envVars.MORTGAGE_PASSWORD);
   await page.press('#password', 'Enter');
 
   // Process Security check if required
@@ -26,7 +28,7 @@ if (process.argv.length != 12) {
     await page.waitForSelector(selector);
     var elements = await page.$$(selector);
     const question = await page.evaluate(el => el.innerText, elements[5]);
-    const answer = provideSecurityQuestionAnswer(question);
+    const answer = provideSecurityQuestionAnswer(question, envVars);
 
     await page.fill('input[name="answer"]', answer);
     await page.click('input[type="submit"]');
@@ -54,15 +56,15 @@ if (process.argv.length != 12) {
   await browser.close();
 })();
 
-function provideSecurityQuestionAnswer(question) {
-  const question1 = process.argv[4];
-  const answer1 = process.argv[5];
-  const question2 = process.argv[6];
-  const answer2 = process.argv[7];
-  const question3 = process.argv[8];
-  const answer3 = process.argv[9];
-  const question4 = process.argv[10];
-  const answer4 = process.argv[11];
+function provideSecurityQuestionAnswer(question, envVars) {
+  const question1 = envVars.QUESTION_1;
+  const answer1 = envVars.ANSWER_1;
+  const question2 = envVars.QUESTION_2;
+  const answer2 = envVars.ANSWER_2;
+  const question3 = envVars.QUESTION_3;
+  const answer3 = envVars.ANSWER_3;
+  const question4 = envVars.QUESTION_4;
+  const answer4 = envVars.ANSWER_4;
 
   switch(question.replace(':', '')) {
     case question1: return answer1;
@@ -72,3 +74,28 @@ function provideSecurityQuestionAnswer(question) {
     default: throw new Error(`Received unsupported question: ${question}`);
   }
 }
+
+function getEnvVars() {
+  const envVars = {
+    MORTGAGE_USERNAME: process.env.MORTGAGE_USERNAME,
+    MORTGAGE_PASSWORD: process.env.MORTGAGE_PASSWORD,
+    QUESTION_1: process.env.QUESTION_1,
+    ANSWER_1: process.env.ANSWER_1,
+    QUESTION_2: process.env.QUESTION_2,
+    ANSWER_2: process.env.ANSWER_2,
+    QUESTION_3: process.env.QUESTION_3,
+    ANSWER_3: process.env.ANSWER_3,
+    QUESTION_4: process.env.QUESTION_4,
+    ANSWER_4: process.env.ANSWER_4
+  }
+
+  for (const property in envVars) {
+    if (envVars[property] === undefined) {
+      console.error(`Environment variable ${property} not defined.`)
+      process.exit(1);
+    }
+  }
+
+  return envVars;
+}
+
