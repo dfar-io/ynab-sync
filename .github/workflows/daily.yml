@@ -24,7 +24,7 @@ jobs:
       run: node adjust_llc_taxes.ts ${{ secrets.YNAB_ACCESS_TOKEN }}
     - name: Adjust mortgage
       run: |
-        mortgage_value=$(node get_mortgage_balance.ts
+        mortgage_value=$(node get_mortgage_balance.ts)
         echo $mortgage_value
         node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 $mortgage_value
       env:
