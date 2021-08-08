@@ -25,9 +25,10 @@ jobs:
     - name: Adjust CX-3 value
       run: |
         car1_value=$(node get_car_value.ts ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }})
-        echo 
+        echo $car1_value
         node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 $car1_value
     - name: Adjust Stelvio value
       run: |
         car2_value=$(node get_car_value.ts ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN2 }})
+        echo $car2_value
         node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} Stelvio $car2_value
