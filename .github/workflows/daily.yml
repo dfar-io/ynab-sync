@@ -28,7 +28,7 @@ jobs:
       run: |
         mortgage_value=$(node get_mortgage_balance.ts)
         echo $mortgage_value
-        node adjust_ynab_account.ts CX-3 -$mortgage_value
+        node adjust_ynab_account.ts Mortgage -$mortgage_value
       env:
         MORTGAGE_USERNAME: ${{ secrets.MORTGAGE_USERNAME }}
         MORTGAGE_PASSWORD: ${{ secrets.MORTGAGE_PASSWORD }}
@@ -44,4 +44,4 @@ jobs:
       run: |
         home_value=$(node get_home_value.ts ${{ secrets.HOME_URL }})
         echo $home_value
-        node adjust_ynab_account.ts CX-3 $home_value
+        node adjust_ynab_account.ts Home $home_value
