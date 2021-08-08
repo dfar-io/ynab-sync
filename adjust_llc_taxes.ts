@@ -1,8 +1,3 @@
-if (process.argv.length != 3) {
-  console.error('usage: node adjust_llc_taxes.ts');
-  process.exit(1);
-}
-  
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
