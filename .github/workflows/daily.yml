@@ -11,6 +11,8 @@ env:
 jobs:
   run:
     runs-on: ubuntu-latest
+    env:
+      YNAB_ACCESS_TOKEN: ${{ secrets.YNAB_ACCESS_TOKEN }}
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v2
@@ -21,12 +23,12 @@ jobs:
     - name: Install dependencies
       run: npm i
     - name: Adjust LLC Taxes
-      run: node adjust_llc_taxes.ts ${{ secrets.YNAB_ACCESS_TOKEN }}
+      run: node adjust_llc_taxes.ts
     - name: Adjust mortgage
       run: |
         mortgage_value=$(node get_mortgage_balance.ts)
         echo $mortgage_value
-        node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 $mortgage_value
+        node adjust_ynab_account.ts CX-3 -$mortgage_value
       env:
         MORTGAGE_USERNAME: ${{ secrets.MORTGAGE_USERNAME }}
         MORTGAGE_PASSWORD: ${{ secrets.MORTGAGE_PASSWORD }}
@@ -40,6 +42,6 @@ jobs:
         ANSWER_4: ${{ secrets.A4 }}
     - name: Adjust home value
       run: |
-        home_value=$(node get_home_value.ts ${{ secrets.URL }})
+        home_value=$(node get_home_value.ts ${{ secrets.HOME_URL }})
         echo $home_value
-        node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 $home_value
+        node adjust_ynab_account.ts CX-3 $home_value

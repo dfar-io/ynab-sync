@@ -1,20 +1,24 @@
-if (process.argv.length != 5) {
-  console.error('usage: node adjust_mortgage.ts <ynab_access_token> <account_name> <balance>');
+if (process.argv.length != 4) {
+  console.error('usage: node adjust_mortgage.ts <account_name> <balance>');
   process.exit(1);
 }
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const ynab = require("ynab");
-const ynabAPI = new ynab.API(process.argv[2]);
+const ynabAPI = new ynab.API(process.env.YNAB_ACCESS_TOKEN);
 
 (async function() {
-  const accountName = process.argv[3];
-  const providedBalance = parseFloat(process.argv[4]);
+  const accountName = process.argv[2];
+  const providedBalance = parseFloat(process.argv[3]);
 
   const budget = await getBudget();
   const account = await getAccount(budget.id, accountName);
 
   // Determine adjustment amount
-  const balance = Math.abs(ynab.utils.convertMilliUnitsToCurrencyAmount(account.balance));
+  const balance = ynab.utils.convertMilliUnitsToCurrencyAmount(account.balance);
   const adjustmentAmount = providedBalance - balance;
   if (adjustmentAmount === 0)
   {
@@ -42,7 +46,7 @@ const ynabAPI = new ynab.API(process.argv[2]);
 })();
 
 function convertCurrencyToMilliUnits(currency) {
-  return currency * 1000;
+  return Math.round(currency * 1000);
 }
 
 async function getBudget() {

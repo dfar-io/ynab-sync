@@ -1,10 +1,14 @@
 if (process.argv.length != 3) {
-  console.error('usage: node adjust_cbg_benefit.ts <ynab_access_token>');
+  console.error('usage: node adjust_cbg_benefit.ts');
   process.exit(1);
 }
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const ynab = require("ynab");
-const ynabAPI = new ynab.API(process.argv[2]);
+const ynabAPI = new ynab.API(process.env.YNAB_ACCESS_TOKEN);
 
 (async function() {
   const accountName = 'Corgi Prof. Dev';
