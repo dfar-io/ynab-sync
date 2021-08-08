@@ -24,5 +24,5 @@ jobs:
       run: node adjust_cb_benefit.ts ${{ secrets.YNAB_ACCESS_TOKEN }}
     - name: Adjust car values
       run: |
-        cx3_car_value = $(node get_car_value.ts 1234) 
-        node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 
+        car1_value=$(node get_car_value.ts ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }}) 
+        node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 $car1_value
