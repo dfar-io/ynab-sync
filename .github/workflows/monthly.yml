@@ -22,7 +22,12 @@ jobs:
       run: npm i
     - name: Adjust Corgibytes benefit
       run: node adjust_cb_benefit.ts ${{ secrets.YNAB_ACCESS_TOKEN }}
-    - name: Adjust car values
+    - name: Adjust CX-3 value
       run: |
-        car1_value=$(node get_car_value.ts ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }}) 
+        car1_value=$(node get_car_value.ts ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }})
+        echo 
         node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 $car1_value
+    - name: Adjust Stelvio value
+      run: |
+        car2_value=$(node get_car_value.ts ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN2 }})
+        node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} Stelvio $car2_value
