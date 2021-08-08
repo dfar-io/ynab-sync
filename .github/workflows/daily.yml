@@ -30,14 +30,14 @@ jobs:
       env:
         MORTGAGE_USERNAME: ${{ secrets.MORTGAGE_USERNAME }}
         MORTGAGE_PASSWORD: ${{ secrets.MORTGAGE_PASSWORD }}
-        QUESTION_1: "${{ secrets.QUESTON_1 }}"
-        ANSWER_1: ${{ secrets.ANSWER_1 }}
-        QUESTION_2: "${{ secrets.QUESTON_2 }}"
-        ANSWER_2: ${{ secrets.ANSWER_2 }}
-        QUESTION_3: "${{ secrets.QUESTON_3 }}"
-        ANSWER_3: ${{ secrets.ANSWER_3 }}
-        QUESTION_4: "${{ secrets.QUESTON_4 }}"
-        ANSWER_4: ${{ secrets.ANSWER_4 }}
+        QUESTION_1: "${{ secrets.Q1 }}"
+        ANSWER_1: ${{ secrets.A1 }}
+        QUESTION_2: "${{ secrets.Q2 }}"
+        ANSWER_2: ${{ secrets.A2 }}
+        QUESTION_3: "${{ secrets.Q3 }}"
+        ANSWER_3: ${{ secrets.A3 }}
+        QUESTION_4: "${{ secrets.Q4 }}"
+        ANSWER_4: ${{ secrets.A4 }}
     - name: Adjust home value
       run: |
         home_value=$(node get_home_value.ts ${{ secrets.URL }})
