@@ -24,7 +24,7 @@ jobs:
       run: node adjust_llc_taxes.ts ${{ secrets.YNAB_ACCESS_TOKEN }}
     - name: Adjust mortgage
       run: |
-        mortgage_value=$(node get_mortgage_balance.ts ${{ secrets.MORTGAGE_USERNAME }} ${{ secrets.MORTGAGE_PASSWORD }} "${{ secrets.Q1 }}" ${{ secrets.A1 }} "${{ secrets.Q2 }}" ${{ secrets.A2 }} "${{ secrets.Q3 }}" ${{ secrets.A3 }} "${{ secrets.Q4 }}" ${{ secrets.Q4 }})
+        mortgage_value=$(node get_mortgage_balance.ts ${{ secrets.MORTGAGE_USERNAME }} ${{ secrets.MORTGAGE_PASSWORD }} "${{ secrets.Q1 }}" ${{ secrets.A1 }} "${{ secrets.Q2 }}" ${{ secrets.A2 }} "${{ secrets.Q3 }}" ${{ secrets.A3 }} "${{ secrets.Q4 }}" ${{ secrets.A4 }})
         echo $mortgage_value
         node adjust_ynab_account.ts ${{ secrets.YNAB_ACCESS_TOKEN }} CX-3 $mortgage_value
     - name: Adjust home value
