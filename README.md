@@ -1,3 +1,6 @@
+![Daily Jobs](https://github.com/dfar-io/ynab-sync/actions/workflows/daily.yml/badge.svg)
+![Monthly Jobs](https://github.com/dfar-io/ynab-sync/actions/workflows/daily.yml/badge.svg)
+
 # YNAB Sync
 
 Collects data using [Playwright](https://playwright.dev/) and then adjusts
@@ -12,3 +15,7 @@ needing any dependencies.
 
 To set up environment variables, use a `.env` environment using the values
 provided in `.env.example`.
+
+You can then run any of the tasks using pre-config:
+
+`node -r dotenv/config YOUR_JOB.js`
