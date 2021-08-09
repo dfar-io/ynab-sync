@@ -1,5 +1,6 @@
 {
   "name": "ynab-sync",
+  "type": "module",
   "scripts": {
     "start": "node main.ts",
     "postinstall": "npx playwright install-deps"
