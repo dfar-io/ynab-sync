@@ -1,12 +1,7 @@
 // When running this in non-prod, you may want to set up a
 // .env file to simulate the required environment files.
 
-const { webkit } = require('playwright');
-const fs = require('fs'); 
-
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
+import { webkit } from 'playwright';
 
 (async () => {
   const envVars = getEnvVars();

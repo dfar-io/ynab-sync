@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 if (process.argv.length != 4) {
   console.error('usage: node get_car_balance.ts <api_key> <vin>');

@@ -1,4 +1,4 @@
-const { webkit } = require('playwright');
+import { webkit } from 'playwright';
 
 if (process.argv.length != 3) {
   console.error('usage: node get_home_value.ts <url>');
