@@ -1,5 +1,5 @@
 ![Daily Jobs](https://github.com/dfar-io/ynab-sync/actions/workflows/daily.yml/badge.svg)
-![Monthly Jobs](https://github.com/dfar-io/ynab-sync/actions/workflows/daily.yml/badge.svg)
+![Monthly Jobs](https://github.com/dfar-io/ynab-sync/actions/workflows/monthly.yml/badge.svg)
 
 # YNAB Sync
 
