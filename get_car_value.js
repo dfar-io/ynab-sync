@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 if (process.argv.length != 4) {
-  console.error('usage: node get_car_balance.ts <api_key> <vin>');
+  console.error('usage: node get_car_balance.js <api_key> <vin>');
   process.exit(1);
 }
 

@@ -3,7 +3,7 @@ if (process.argv.length != 4) {
   process.exit(1);
 }
 
-import { getBudgetAsync, getAccountAsync, convertCurrencyToMilliUnits, ynabAPI, ynab } from './ynab-sync-lib.js'
+import { getBudgetAsync, getAccountAsync, ynab, createTransaction } from './ynab-sync-lib.js'
 
 (async function() {
   const accountName = process.argv[2];
@@ -21,22 +21,6 @@ import { getBudgetAsync, getAccountAsync, convertCurrencyToMilliUnits, ynabAPI, 
     process.exit(0);
   }
 
-  // Create adjustment transaction
-  console.log(`${accountName}: Creating adjustment transaction of $${adjustmentAmount}.`);
-  await ynabAPI.transactions.createTransaction(
-    budget.id,
-    {
-      transaction: {
-        account_id: account.id,
-        date: ynab.utils.getCurrentDateInISOFormat(),
-        amount: convertCurrencyToMilliUnits(adjustmentAmount),
-        memo: "Adjustment from YNAB-Sync",
-        cleared: ynab.SaveTransaction.ClearedEnum.Cleared
-      }
-    }
-  ).catch(e => {
-    console.error(e);
-    process.exit(1);
-  });;
+  createTransaction(budget.id, account.id, accountName, adjustmentAmount);
 })();
 

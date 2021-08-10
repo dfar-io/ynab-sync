@@ -23,12 +23,12 @@ jobs:
     - name: Install dependencies
       run: npm i
     - name: Adjust LLC Taxes
-      run: node adjust_llc_taxes.ts
+      run: node adjust_llc_taxes.js
     - name: Adjust mortgage
       run: |
-        mortgage_value=$(node get_mortgage_balance.ts)
+        mortgage_value=$(node get_mortgage_balance.js)
         echo $mortgage_value
-        node adjust_ynab_account.ts Mortgage -$mortgage_value
+        node adjust_ynab_account.js Mortgage -$mortgage_value
       env:
         MORTGAGE_USERNAME: ${{ secrets.MORTGAGE_USERNAME }}
         MORTGAGE_PASSWORD: ${{ secrets.MORTGAGE_PASSWORD }}
@@ -42,6 +42,6 @@ jobs:
         ANSWER_4: ${{ secrets.A4 }}
     - name: Adjust home value
       run: |
-        home_value=$(node get_home_value.ts ${{ secrets.HOME_URL }})
+        home_value=$(node get_home_value.js ${{ secrets.HOME_URL }})
         echo $home_value
-        node adjust_ynab_account.ts Home $home_value
+        node adjust_ynab_account.js Home $home_value

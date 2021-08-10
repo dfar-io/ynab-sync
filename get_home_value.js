@@ -1,7 +1,7 @@
 import { webkit } from 'playwright';
 
 if (process.argv.length != 3) {
-  console.error('usage: node get_home_value.ts <url>');
+  console.error('usage: node get_home_value.js <url>');
   process.exit(1);
 }
 

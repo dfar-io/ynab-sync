@@ -1,6 +1,6 @@
 import ynab from "ynab";
 export const ynabAPI = new ynab.API(process.env.YNAB_ACCESS_TOKEN);
-export { ynab }
+export { ynab };
 
 export async function getBudgetAsync() {
     const budgetName = 'Budget'
@@ -17,6 +17,25 @@ export async function getAccountAsync(budget_id, account_name) {
     if (mortgageAccount == null) throw new Error(`Unable to find \'${account_name}\' account.`);
   
     return mortgageAccount;
+}
+
+export async function createTransaction(budget_id, account_id, account_name, transactionAmount) {
+    console.log(`${account_name}: Creating adjustment transaction of $${transactionAmount}.`);
+    await ynabAPI.transactions.createTransaction(
+        budget_id,
+        {
+            transaction: {
+                account_id: account_id,
+                date: ynab.utils.getCurrentDateInISOFormat(),
+                amount: convertCurrencyToMilliUnits(transactionAmount),
+                memo: "Adjustment from YNAB-Sync",
+                cleared: ynab.SaveTransaction.ClearedEnum.Cleared
+            }
+        }
+    ).catch(e => {
+        console.error(e);
+        process.exit(1);
+    });
 }
 
 export function convertCurrencyToMilliUnits(currency) {
