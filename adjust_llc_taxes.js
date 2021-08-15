@@ -27,7 +27,7 @@ import { getBudgetAsync, getAccountAsync, ynabAPI } from './ynab-sync-lib.js'
   
 async function getLLCCategoryAsync(budget_id) {
   const llcCategoryName = '1099 Taxes';
-  const mainCategoryGroupName = 'Main';
+  const mainCategoryGroupName = 'Planned';
 
   const categoriesResponse = await ynabAPI.categories.getCategories(budget_id);
   const mainCategoryGroup = categoriesResponse.data.category_groups.find(cg => cg.name === mainCategoryGroupName);
