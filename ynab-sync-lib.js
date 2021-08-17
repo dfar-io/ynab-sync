@@ -57,7 +57,8 @@ export async function getCategoryAsync(category_group, category_name) {
 
 export function verifyEnvVars(env_vars) {
     for (const property in env_vars) {
-        if (env_vars[property] === undefined) {
+        const value = env_vars[property];
+        if (value === undefined || value === '') {
           console.error(`Environment variable ${property} not defined.`)
           process.exit(1);
         }
