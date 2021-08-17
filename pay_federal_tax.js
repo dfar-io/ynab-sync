@@ -1,4 +1,5 @@
 import { webkit } from 'playwright';
+import { verifyEnvVars } from './ynab-sync-lib';
 
 if (process.argv.length != 3) {
   console.error('usage: node pay_federal_tax.js <amount>');
@@ -84,12 +85,7 @@ function getEnvVars() {
       ZIP_CODE: process.env.ZIP_CODE,
     }
   
-    for (const property in envVars) {
-      if (envVars[property] === undefined) {
-        console.error(`Environment variable ${property} not defined.`)
-        process.exit(1);
-      }
-    }
+    verifyEnvVars(envVars)
   
     return envVars;
 }

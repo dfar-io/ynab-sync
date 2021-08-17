@@ -2,6 +2,7 @@
 // .env file to simulate the required environment files.
 
 import { webkit } from 'playwright';
+import { verifyEnvVars } from './ynab-sync-lib.js';
 
 (async () => {
   const envVars = getEnvVars();
@@ -84,12 +85,7 @@ function getEnvVars() {
     ANSWER_4: process.env.ANSWER_4
   }
 
-  for (const property in envVars) {
-    if (envVars[property] === undefined) {
-      console.error(`Environment variable ${property} not defined.`)
-      process.exit(1);
-    }
-  }
+  verifyEnvVars(envVars);
 
   return envVars;
 }

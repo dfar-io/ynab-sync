@@ -60,3 +60,12 @@ export async function getCategoryAsync(category_group, category_name) {
 
     return category;
 }
+
+export function verifyEnvVars(env_vars) {
+    for (const property in env_vars) {
+        if (env_vars[property] === undefined) {
+          console.error(`Environment variable ${property} not defined.`)
+          process.exit(1);
+        }
+    }
+}
