@@ -17,10 +17,7 @@ export async function getBudgetAsync() {
 
 export async function getAccountAsync(budget_id, account_name) {
     const accountsResponse = await ynabAPI.accounts.getAccounts(budget_id);
-    const mortgageAccount = accountsResponse.data.accounts.find(a => a.name === account_name);
-    if (mortgageAccount == null) throw new Error(`Unable to find \'${account_name}\' account.`);
-  
-    return mortgageAccount;
+    return getEntity(accountsResponse, 'accounts', account_name);
 }
 
 export async function createTransaction(budget_id, account_id, account_name, transactionAmount) {
@@ -48,10 +45,7 @@ export function convertCurrencyToMilliUnits(currency) {
 
 export async function getCategoryGroupAsync(budget_id, category_group_name) {
     const categoriesResponse = await ynabAPI.categories.getCategories(budget_id);
-    const categoryGroup = categoriesResponse.data.category_groups.find(cg => cg.name === category_group_name);
-    if (categoryGroup == null) throw new Error(`Unable to find \'${category_group_name}\' category group.`);
-
-    return categoryGroup;
+    return getEntity(categoriesResponse, 'category_groups', category_group_name);
 }
 
 export async function getCategoryAsync(category_group, category_name) {
@@ -68,4 +62,12 @@ export function verifyEnvVars(env_vars) {
           process.exit(1);
         }
     }
+}
+
+function getEntity(response, data_name, name) {
+    const entity = response.data[data_name].find(a => a.name === name);
+    if (entity == null)
+        throw new Error(`Unable to find \'${name}\'.`);
+
+    return entity;
 }

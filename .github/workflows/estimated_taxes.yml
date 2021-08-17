@@ -30,7 +30,9 @@ jobs:
       run: |
         federal_amount=$(node get_category_percentage.js '${{ env.CATEGORY_GROUP }}' '${{ env.CATEGORY }}' ${{ env.FEDERAL_PERCENTAGE }})
         echo $federal_amount
+        node pay_federal_tax.js $federal_amount
     - name: Pay state tax
       run: |
         state_amount=$(node get_category_percentage.js '${{ env.CATEGORY_GROUP }}' '${{ env.CATEGORY }}' ${{ env.STATE_PERCENTAGE }})
         echo $state_amount
+        node pay_state_tax.js $state_amount
