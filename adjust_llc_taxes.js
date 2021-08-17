@@ -1,4 +1,4 @@
-import { getBudgetAsync, getAccountAsync, ynabAPI } from './ynab-sync-lib.js'
+import { getBudgetAsync, getAccountAsync, ynabAPI, getCategoryGroupAsync, getCategoryAsync } from './ynab-sync-lib.js'
   
 (async function() {
   // This should be the percent taken between both federal and state
@@ -6,7 +6,7 @@ import { getBudgetAsync, getAccountAsync, ynabAPI } from './ynab-sync-lib.js'
   
   const budget = await getBudgetAsync();
   const account = await getAccountAsync(budget.id, 'LLC');
-
+  
   const transactionsResponse = await ynabAPI.transactions.getTransactionsByAccount(budget.id, account.id);
   const transactionsData = transactionsResponse.data.transactions;
   const unflaggedTransactions = transactionsData.filter(t => t.flag_color === null && t.amount > 0);
@@ -24,23 +24,10 @@ import { getBudgetAsync, getAccountAsync, ynabAPI } from './ynab-sync-lib.js'
     await markTransactionAsync(budget.id, transaction);
   });
 })();
-  
-async function getLLCCategoryAsync(budget_id) {
-  const llcCategoryName = '1099 Taxes';
-  const mainCategoryGroupName = 'Planned';
-
-  const categoriesResponse = await ynabAPI.categories.getCategories(budget_id);
-  const mainCategoryGroup = categoriesResponse.data.category_groups.find(cg => cg.name === mainCategoryGroupName);
-  if (mainCategoryGroup == null) throw new Error(`Unable to find \'${mainCategoryGroupName}\' category group.`);
-
-  const llcCategory = mainCategoryGroup.categories.find(c => c.name === llcCategoryName);
-  if (llcCategory == null) throw new Error(`Unable to find \'${llcCategoryName}\' category.`);
-
-  return llcCategory;
-}
 
 async function addTaxAmountToCategoryAsync(budget_id, taxAmount) {
-  const category = await getLLCCategoryAsync(budget_id);
+  const categoryGroup = await getCategoryGroupAsync(budget_id, 'Planned');
+  const category = await getCategoryAsync(categoryGroup, '1099 Taxes');
   category.budgeted = category.budgeted + taxAmount;
   await ynabAPI.categories.updateMonthCategory(
     budget_id,
@@ -69,4 +56,3 @@ async function markTransactionAsync(budget_id, transaction) {
     process.exit(1);
   });
 }
-

@@ -1,9 +1,9 @@
 name: Estimated Taxes
 
 on:
-  # schedule:
-  #  - '0 0 1 1,4,6,9 *'
-  # workflow_dispatch:
+  schedule:
+   - '0 0 1 1,4,6,9 *'
+  workflow_dispatch:
 
 env:
   NODE_VERSION: '16.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       YNAB_ACCESS_TOKEN: ${{ secrets.YNAB_ACCESS_TOKEN }}
+      CATEGORY_GROUP: Planned
+      CATEGORY: '1099 Taxes'
+      FEDERAL_PERCENTAGE: 76.5
+      STATE_PERCENTAGE: 33.5
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v2
@@ -22,15 +26,11 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: Install dependencies
       run: npm i
-    - name: Adjust Corgibytes benefit
-      run: node adjust_cb_benefit.js
-    - name: Adjust CX-3 value
+    - name: Pay federal tax
       run: |
-        car1_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }})
-        echo $car1_value
-        node adjust_ynab_account.js CX-3 $car1_value
-    - name: Adjust Stelvio value
+        federal_amount=$(node get_category_percentage.js ${{ env.CATEGORY_GROUP }} ${{ env.CATEGORY }} ${{ env.FEDERAL_PERCENTAGE }}
+        echo $federal_amount
+    - name: Pay state tax
       run: |
-        car2_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN2 }})
-        echo $car2_value
-        node adjust_ynab_account.js Stelvio $car2_value
+        state_amount=$(node get_category_percentage.js ${{ env.CATEGORY_GROUP }} ${{ env.CATEGORY }} ${{ env.STATE_PERCENTAGE }}
+        echo $state_amount
