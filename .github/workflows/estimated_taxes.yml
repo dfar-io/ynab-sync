@@ -28,9 +28,9 @@ jobs:
       run: npm i
     - name: Pay federal tax
       run: |
-        federal_amount=$(node get_category_percentage.js ${{ env.CATEGORY_GROUP }} ${{ env.CATEGORY }} ${{ env.FEDERAL_PERCENTAGE }}
+        federal_amount=$(node get_category_percentage.js ${{ env.CATEGORY_GROUP }} ${{ env.CATEGORY }} ${{ env.FEDERAL_PERCENTAGE }})
         echo $federal_amount
     - name: Pay state tax
       run: |
-        state_amount=$(node get_category_percentage.js ${{ env.CATEGORY_GROUP }} ${{ env.CATEGORY }} ${{ env.STATE_PERCENTAGE }}
+        state_amount=$(node get_category_percentage.js ${{ env.CATEGORY_GROUP }} ${{ env.CATEGORY }} ${{ env.STATE_PERCENTAGE }})
         echo $state_amount
