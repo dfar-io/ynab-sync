@@ -26,13 +26,32 @@ if (process.argv.length != 3) {
   await page.fill('input#authenticationForm_authenticationInputFields_4__fieldValue', firstName.substring(0, 4));
   await page.fill('input#authenticationForm_authenticationInputFields_5__fieldValue', envVars.ZIP_CODE);
   // Need to do this directly since the field is hidden
-  await page.evaluate(() => {
-    document.querySelector('input#authenticationForm_authenticationInputFields_1__fieldValue').value = 9489
+  await page.evaluate((last4Ssn) => {
+    document.querySelector('input#authenticationForm_authenticationInputFields_1__fieldValue').value = last4Ssn
     document.querySelector('input#authenticate').click();
-  });
+  }, last4Ssn);
 
   await page.waitForTimeout(5000);
   await page.screenshot({ path: `state.png` });
+
+
+  // Page 3
+  await page.fill('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_1__text', firstName);
+  await page.fill('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_4__text', envVars.SPOUSE_FIRST_NAME);
+  // This needs to be dynamic based on the current timeframe
+  await page.selectOption('#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_5__value', '2021 Estimate 1st quarter');
+  //await page.selectOption('#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_6__value',  'Yes, e-filed');
+  await page.evaluate((envVars) => {
+    document.querySelector('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_3__text').value = envVars.SPOUSE_SSN
+    document.querySelector('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_3__reEnterText').value = envVars.SPOUSE_SSN
+    
+    //document.querySelector('input#authenticate').click();
+  }, envVars);
+
+  await page.waitForTimeout(5000);
+  await page.screenshot({ path: `state1.png` });
+
+
 
 
   // // Step 1
@@ -92,6 +111,8 @@ function getEnvVars() {
     const envVars = {
       SSN: process.env.SSN,
       ZIP_CODE: process.env.ZIP_CODE,
+      SPOUSE_SSN: process.env.SPOUSE_SSN,
+      SPOUSE_FIRST_NAME: process.env.SPOUSE_FIRST_NAME
     }
   
     verifyEnvVars(envVars)
