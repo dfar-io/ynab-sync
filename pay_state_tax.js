@@ -1,5 +1,5 @@
 import { webkit } from 'playwright';
-import { verifyEnvVars } from './ynab-sync-lib.js';
+import { getEnvVars } from './ynab-sync-lib.js';
 
 if (process.argv.length != 3) {
   console.error('usage: node pay_state_tax.js <amount>');
@@ -92,26 +92,6 @@ if (process.argv.length != 3) {
   await context.close();
   await browser.close();
 })();
-
-function getEnvVars() {
-    const envVars = {
-      SSN: process.env.SSN,
-      ZIP_CODE: process.env.ZIP_CODE,
-      SPOUSE_SSN: process.env.SPOUSE_SSN,
-      SPOUSE_FIRST_NAME: process.env.SPOUSE_FIRST_NAME,
-      ROUTING_NUMBER: process.env.ROUTING_NUMBER,
-      ACCOUNT_NUMBER: process.env.ACCOUNT_NUMBER,
-      PHONE_NUMBER: process.env.PHONE_NUMBER,
-      EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
-      STREET_ADDRESS: process.env.STREET_ADDRESS,
-      CITY: process.env.CITY,
-      STATE_ABBV: process.env.STATE_ABBV
-    }
-  
-    verifyEnvVars(envVars)
-  
-    return envVars;
-}
 
 function getPaymentType() {
   const currentMonth = new Date().getMonth();

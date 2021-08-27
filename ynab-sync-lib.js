@@ -72,3 +72,26 @@ function getEntity(response, data_name, name) {
 
     return entity;
 }
+
+function getEnvVars() {
+    const envVars = {
+      SSN: process.env.SSN,
+      ZIP_CODE: process.env.ZIP_CODE,
+      SPOUSE_SSN: process.env.SPOUSE_SSN,
+      SPOUSE_FIRST_NAME: process.env.SPOUSE_FIRST_NAME,
+      ROUTING_NUMBER: process.env.ROUTING_NUMBER,
+      ACCOUNT_NUMBER: process.env.ACCOUNT_NUMBER,
+      PHONE_NUMBER: process.env.PHONE_NUMBER,
+      EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
+      STREET_ADDRESS: process.env.STREET_ADDRESS,
+      CITY: process.env.CITY,
+      STATE_ABBV: process.env.STATE_ABBV,
+      BIRTH_YEAR: process.env.BIRTH_YEAR,
+      BIRTH_MONTH: process.env.BIRTH_MONTH,
+      BIRTH_DAY: process.env.BIRTH_DAY
+    }
+  
+    verifyEnvVars(envVars)
+  
+    return envVars;
+}

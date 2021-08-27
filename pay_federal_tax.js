@@ -1,5 +1,5 @@
 import { webkit } from 'playwright';
-import { verifyEnvVars } from './ynab-sync-lib';
+import { getEnvVars } from './ynab-sync-lib';
 
 if (process.argv.length != 3) {
   console.error('usage: node pay_federal_tax.js <amount>');
@@ -69,23 +69,3 @@ if (process.argv.length != 3) {
 
   await browser.close();
 })();
-
-function getEnvVars() {
-    const envVars = {
-      SSN: process.env.SSN,
-      ROUTING_NUMBER: process.env.ROUTING_NUMBER,
-      ACCOUNT_NUMBER: process.env.ACCOUNT_NUMBER,
-      EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
-      BIRTH_YEAR: process.env.BIRTH_YEAR,
-      BIRTH_MONTH: process.env.BIRTH_MONTH,
-      BIRTH_DAY: process.env.BIRTH_DAY,
-      STREET_ADDRESS: process.env.STREET_ADDRESS,
-      CITY: process.env.CITY,
-      STATE_ABBV: process.env.STATE_ABBV,
-      ZIP_CODE: process.env.ZIP_CODE,
-    }
-  
-    verifyEnvVars(envVars)
-  
-    return envVars;
-}
