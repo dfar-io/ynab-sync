@@ -1,5 +1,5 @@
 import { webkit } from 'playwright';
-import { getEnvVars } from './ynab-sync-lib';
+import { getEnvVars } from './ynab-sync-lib.js';
 
 if (process.argv.length != 3) {
   console.error('usage: node pay_federal_tax.js <amount>');

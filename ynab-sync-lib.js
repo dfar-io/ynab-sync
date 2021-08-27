@@ -65,15 +65,7 @@ export function verifyEnvVars(env_vars) {
     }
 }
 
-function getEntity(response, data_name, name) {
-    const entity = response.data[data_name].find(a => a.name === name);
-    if (entity == null)
-        throw new Error(`Unable to find \'${name}\'.`);
-
-    return entity;
-}
-
-function getEnvVars() {
+export function getEnvVars() {
     const envVars = {
       SSN: process.env.SSN,
       ZIP_CODE: process.env.ZIP_CODE,
@@ -94,4 +86,12 @@ function getEnvVars() {
     verifyEnvVars(envVars)
   
     return envVars;
+}
+
+function getEntity(response, data_name, name) {
+    const entity = response.data[data_name].find(a => a.name === name);
+    if (entity == null)
+        throw new Error(`Unable to find \'${name}\'.`);
+
+    return entity;
 }
