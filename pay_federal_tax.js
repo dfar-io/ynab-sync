@@ -35,10 +35,10 @@ if (process.argv.length != 3) {
   await page.selectOption('select#birthMonth', envVars.BIRTH_MONTH);
   await page.selectOption('select#birthDay', envVars.BIRTH_DAY);
   await page.fill('#birthYear', envVars.BIRTH_YEAR);
-  await page.fill('#address\\.streetAddress', '2258 Holton Ln');
-  await page.fill('#address\\.city', 'West Bloomfield');
-  await page.selectOption('select#address\\.state', 'MI');
-  await page.fill('#address\\.zipCode', '48323');
+  await page.fill('#address\\.streetAddress', envVars.STREET_ADDRESS);
+  await page.fill('#address\\.city', envVars.CITY);
+  await page.selectOption('select#address\\.state', envVars.STATE_ABBV);
+  await page.fill('#address\\.zipCode', envVars.ZIP_CODE);
   await page.check('#privacyActNotice');
   await page.click('button#next');
 

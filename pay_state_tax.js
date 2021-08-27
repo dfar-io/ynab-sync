@@ -7,14 +7,23 @@ if (process.argv.length != 3) {
 }
 
 (async () => {
-  const envVars = getEnvVars();
   const amount = process.argv[2];
+  if (amount < 1.00) {
+    console.error('Amount must be 1.00 or greater.');
+    process.exit(1);
+  }
+
+  const envVars = getEnvVars();
   const firstName = 'Dave';
   const lastName = 'Farinelli';
   const last4Ssn = envVars.SSN.substring(envVars.SSN.length - 4);
 
   const browser = await webkit.launch();
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    recordVideo: { dir: 'video' },
+    viewport: { height: 3000, width: 3000 }
+  })
+  const page = await context.newPage();
 
   // Page 1
   // Need to submit from first page since it brings in a collection of hidden inputs
@@ -22,88 +31,65 @@ if (process.argv.length != 3) {
   await page.$eval('form[action="https://www.payconnexion.com/pconWeb/epay.jhtml"]', (form) => form.submit());
 
   // Page 2
-  await page.fill('input#authenticationForm_authenticationInputFields_3__fieldValue', lastName.substring(0, 4));
-  await page.fill('input#authenticationForm_authenticationInputFields_4__fieldValue', firstName.substring(0, 4));
-  await page.fill('input#authenticationForm_authenticationInputFields_5__fieldValue', envVars.ZIP_CODE);
+  await waitThenFillAsync(page, 'input#authenticationForm_authenticationInputFields_3__fieldValue', lastName.substring(0, 4));
+  await waitThenFillAsync(page, 'input#authenticationForm_authenticationInputFields_4__fieldValue', firstName.substring(0, 4));
+  await waitThenFillAsync(page, 'input#authenticationForm_authenticationInputFields_5__fieldValue', envVars.ZIP_CODE);
   // Need to do this directly since the field is hidden
   await page.evaluate((last4Ssn) => {
     document.querySelector('input#authenticationForm_authenticationInputFields_1__fieldValue').value = last4Ssn
     document.querySelector('input#authenticate').click();
   }, last4Ssn);
 
-  await page.waitForTimeout(5000);
-  await page.screenshot({ path: `state.png` });
-
-
   // Page 3
-  await page.fill('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_1__text', firstName);
-  await page.fill('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_4__text', envVars.SPOUSE_FIRST_NAME);
-  // This needs to be dynamic based on the current timeframe
-  await page.selectOption('#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_5__value', '2021 Estimate 1st quarter');
-  //await page.selectOption('#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_6__value',  'Yes, e-filed');
-  await page.evaluate((envVars) => {
-    document.querySelector('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_3__text').value = envVars.SPOUSE_SSN
-    document.querySelector('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_3__reEnterText').value = envVars.SPOUSE_SSN
+  await waitThenFillAsync(page, 'input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_1__text', firstName);
+  await waitThenFillAsync(page, 'input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_4__text', envVars.SPOUSE_FIRST_NAME);
+  await page.selectOption('#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_5__value', getPaymentType());
+  await page.selectOption('#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_6__value',  ' Yes, e-filed');
+  await waitThenFillAsync(page, 'input#compressedPaymentForm_enterPaymentInformationForm_singlePaymentAmount', amount);
+  await waitThenFillAsync(page, 'input#bankRTNnumber', envVars.ROUTING_NUMBER);
+  await page.check('#compressedPaymentForm_enterPaymentDetailsForm_paymentBankAccountForm_accountTypeC');
+  await page.check('#compressedPaymentForm_enterPaymentDetailsForm_paymentBankAccountForm_accountCategoryC');
+  await waitThenFillAsync(page, 'input#firstNameACH', firstName);
+  await waitThenFillAsync(page, 'input#lastNameACH', lastName);
+  await page.selectOption('select#stateACH', envVars.STATE_ABBV);
+
+  // Populate hidden values and click
+  await page.evaluate(({envVars, firstName, lastName}) => {
+    document.querySelector('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_3__text').value = envVars.SPOUSE_SSN;
+    document.querySelector('input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_3__reEnterText').value = envVars.SPOUSE_SSN;
+    document.querySelector('input#bankAccountNumber').value = envVars.ACCOUNT_NUMBER;
+    document.querySelector('input#bankAccountNumberConfirm').value = envVars.ACCOUNT_NUMBER;
+    document.querySelector('input#payorProfileForm_firstName').value = firstName;
+    document.querySelector('input#payorProfileForm_lastName').value = lastName;
+    document.querySelector('input#payorProfileForm_phoneField_areaCode').value = envVars.PHONE_NUMBER.substring(0, 3);
+    document.querySelector('input#payorProfileForm_phoneField_prefix').value  = envVars.PHONE_NUMBER.substring(3, 6);
+    document.querySelector('input#payorProfileForm_phoneField_suffix').value = envVars.PHONE_NUMBER.substring(6, 10);
+    document.querySelector('input#payorProfileForm_email').value = envVars.EMAIL_ADDRESS;
+    document.querySelector('input#payorProfileForm_addressForm_street1').value = envVars.STREET_ADDRESS;
+    document.querySelector('input#payorProfileForm_addressForm_city').value = envVars.CITY;
+    document.querySelector('input#payorProfileForm_addressForm_zipField_zip5').value = envVars.ZIP_CODE;
     
-    //document.querySelector('input#authenticate').click();
-  }, envVars);
+    document.querySelector('input#formSubmitComp').click();
+  }, {envVars, firstName, lastName});
 
-  await page.waitForTimeout(5000);
-  await page.screenshot({ path: `state1.png` });
+  // Page 4
+  // This is the general idea to allow for videos to be recorded no matter where the process fails.
+  try {
+    await page.check('#verifyPaymentForm_acceptDebitAuthorization');
+    await page.click('input#confirmBtn');
+  } catch (err) {
+    await context.close();
+    throw err;
+  }
 
+  // Get the confirmation number and output it
+  await page.waitForTimeout(10000);
+  var elements = await page.$$('.boldy');
+  const confirmationNumber = await page.evaluate(el => el.innerText, elements[1]);
 
+  console.log(confirmationNumber);
 
-
-  // // Step 1
-  // await page.selectOption('select#payment\\.selectedBoxOne', 'Estimated Tax');
-  // await page.selectOption('#payment\\.selectedBoxTwo', '1040ES (for 1040, 1040A, 1040EZ)');
-  // await page.selectOption('#payment\\.selectedTaxYear', new Date().getFullYear().toString());
-  // await page.click('button#next');
-  // await page.click('button.continue');
-
-  // // Step 2
-  // await page.selectOption('select#filingTaxYear', (new Date().getFullYear() - 1).toString());
-  // await page.selectOption('select#selectedFilingStatus', '2');  // Married filed jointly
-  // await page.fill('#firstName', firstName);
-  // await page.fill('#lastName', lastName);
-  // await page.fill('#reLastName', lastName);
-  // await page.fill('#identitySsn', envVars.SSN);
-  // await page.fill('#identityReSsn', envVars.SSN);
-  // await page.selectOption('select#birthMonth', envVars.BIRTH_MONTH);
-  // await page.selectOption('select#birthDay', envVars.BIRTH_DAY);
-  // await page.fill('#birthYear', envVars.BIRTH_YEAR);
-  // await page.fill('#address\\.streetAddress', '2258 Holton Ln');
-  // await page.fill('#address\\.city', 'West Bloomfield');
-  // await page.selectOption('select#address\\.state', 'MI');
-  // await page.fill('#address\\.zipCode', '48323');
-  // await page.check('#privacyActNotice');
-  // await page.click('button#next');
-
-  // // Step 3
-  // await page.fill('#payment\\.paymentAmount', amount);
-  // await page.fill('#payment\\.rePaymentAmount', amount);
-  // await page.fill('#payment\\.account\\.routingNumber', envVars.ROUTING_NUMBER);
-  // await page.fill('#payment\\.account\\.accountNumber', envVars.ACCOUNT_NUMBER);
-  // await page.fill('#payment\\.account\\.reAccountNumber', envVars.ACCOUNT_NUMBER);
-  // await page.check('text=Checking');
-  // await page.check('#optedForEmail');
-  // await page.fill('#emailAddress', envVars.EMAIL_ADDRESS);
-  // await page.fill('#reEmailAddress', envVars.EMAIL_ADDRESS);
-  // await page.click('button#next');
-
-  // // Step 4
-  // await page.click('button#discAuthModal_agree');
-  // await page.fill('#payment\\.sigFirstName', firstName);
-  // await page.fill('#payment\\.sigLastName', lastName);
-  // await page.fill('#payment\\.sigSsn', ssn);
-  // await page.check('#authAgree');
-  // await page.click('button#next');
-
-  // // Get the confirmation number and output it
-  // const confirmationNumber = await page.evaluate(el => el.innerText, await page.$('#eftID'));
-
-  // console.log(confirmationNumber);
-
+  await context.close();
   await browser.close();
 })();
 
@@ -112,10 +98,51 @@ function getEnvVars() {
       SSN: process.env.SSN,
       ZIP_CODE: process.env.ZIP_CODE,
       SPOUSE_SSN: process.env.SPOUSE_SSN,
-      SPOUSE_FIRST_NAME: process.env.SPOUSE_FIRST_NAME
+      SPOUSE_FIRST_NAME: process.env.SPOUSE_FIRST_NAME,
+      ROUTING_NUMBER: process.env.ROUTING_NUMBER,
+      ACCOUNT_NUMBER: process.env.ACCOUNT_NUMBER,
+      PHONE_NUMBER: process.env.PHONE_NUMBER,
+      EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
+      STREET_ADDRESS: process.env.STREET_ADDRESS,
+      CITY: process.env.CITY,
+      STATE_ABBV: process.env.STATE_ABBV
     }
   
     verifyEnvVars(envVars)
   
     return envVars;
+}
+
+function getPaymentType() {
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  // if January, get last year
+  const year = currentMonth === 0 ?
+    currentYear - 1 :
+    currentYear;
+  
+  var iteration = getIteration(currentMonth);
+
+  return `${year} Estimate ${iteration} quarter`;
+}
+
+function getIteration(currentMonth) {
+  switch (currentMonth) {
+    case 0:   // January
+      return '4th';
+    case 3:   // April
+      return '1st';
+    case 5:   // June
+      return '2nd';
+    case 7:   // September
+      return '3rd';
+    default:
+      throw new Error(`Invalid month provided to get iteration: ${currentMonth}`);
+  }
+}
+
+async function waitThenFillAsync(page, selector, value) {
+  await page.waitForSelector(selector);
+  await page.fill(selector, value);
 }
