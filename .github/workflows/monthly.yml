@@ -6,13 +6,16 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '16.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
+  NODE_VERSION: '16.x'
 
 jobs:
   run:
     runs-on: ubuntu-latest
     env:
       YNAB_ACCESS_TOKEN: ${{ secrets.YNAB_ACCESS_TOKEN }}
+      ZOHO_CLIENT_ID: ${{ secrets.ZOHO_CLIENT_ID }}
+      ZOHO_CLIENT_SECRET: ${{ secrets.ZOHO_CLIENT_SECRET }}
+      ZOHO_REFRESH_TOKEN: ${{ secrets.ZOHO_REFRESH_TOKEN }}
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v2
@@ -34,3 +37,6 @@ jobs:
         car2_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN2 }})
         echo $car2_value
         node adjust_ynab_account.js Stelvio $car2_value
+    - name: Send invoice
+      run: |
+        node send_invoice.js
