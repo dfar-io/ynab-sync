@@ -7,13 +7,23 @@ if (process.argv.length != 3) {
 
 (async () => {
   const browser = await webkit.launch();
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    recordVideo: { dir: 'video' }
+  })
+  const page = await context.newPage();
 
   const url = process.argv[2];
-  await page.goto(`https://www.trulia.com/p/${url}`);
 
-  const homeValue = await page.evaluate(el => el.innerText, await page.$('.nBoMt'));
-  console.log(homeValue.replace('$', '').replace(',', ''));
+  try {
+    await page.goto(`https://www.trulia.com/p/${url}`);
 
+    const homeValue = await page.evaluate(el => el.innerText, await page.$('.nBoMt'));
+    console.log(homeValue.replace('$', '').replace(',', ''));
+  } catch (err) {
+    await context.close();
+    throw err;
+  }
+
+  await context.close();
   await browser.close();
 })();

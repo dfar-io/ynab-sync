@@ -10,45 +10,52 @@ import { verifyEnvVars } from './ynab-sync-lib.js';
   const selector = 'td.dcolor';
 
   const browser = await webkit.launch();
-  const page = await browser.newPage();
-  await page.goto('https://www.webpmt.com/cgi-bin/customers/clogin.pl');
+  const context = await browser.newContext({
+    recordVideo: { dir: 'video' }
+  })
+  const page = await context.newPage();
 
-  // Login
-  await page.fill('#loannumber', envVars.MORTGAGE_USERNAME);
-  await page.fill('#password', envVars.MORTGAGE_PASSWORD);
-  await page.press('#password', 'Enter');
+  try {
+    await page.goto('https://www.webpmt.com/cgi-bin/customers/clogin.pl');
 
-  // Process Security check if required
-  var content = await page.content();
-  if (content.includes('Enhanced Login Security')) {
+    // Login
+    await page.fill('#loannumber', envVars.MORTGAGE_USERNAME);
+    await page.fill('#password', envVars.MORTGAGE_PASSWORD);
+    await page.press('#password', 'Enter');
+
+    // Process Security check if required
+    var content = await page.content();
+    if (content.includes('Enhanced Login Security')) {
+      await page.waitForSelector(selector);
+      var elements = await page.$$(selector);
+      const question = await page.evaluate(el => el.innerText, elements[5]);
+      const answer = provideSecurityQuestionAnswer(question, envVars);
+
+      await page.fill('input[name="answer"]', answer);
+      await page.click('input[type="submit"]');
+    }
+
+    // Move to My Info page
+    try {
+      await page.click('text=MY INFO');
+    } catch (e) {
+      if (e.name === 'TimeoutError') {
+        console.error('Unable to progress to \'My Info\' page, credentials may be bad.');
+        throw e
+      }
+    }
+
+    // Get loan balance
     await page.waitForSelector(selector);
     var elements = await page.$$(selector);
-    const question = await page.evaluate(el => el.innerText, elements[5]);
-    const answer = provideSecurityQuestionAnswer(question, envVars);
-
-    await page.fill('input[name="answer"]', answer);
-    await page.click('input[type="submit"]');
+    const loanBalance = await page.evaluate(el => el.innerText, elements[10]);
+    console.log(`${loanBalance}`);
+  } catch (err) {
+    await context.close();
+    throw err;
   }
 
-  // Move to My Info page
-  try {
-    await page.click('text=MY INFO');
-  } catch (e) {
-    if (e.name === 'TimeoutError') {
-      console.error('Unable to progress to \'My Info\' page, credentials may be bad.');
-      await page.screenshot({ path: `error.png` });
-      const content = await page.content();
-      console.log(content);
-      process.exit(1);
-    }
-  }
-
-  // Get loan balance
-  await page.waitForSelector(selector);
-  var elements = await page.$$(selector);
-  const loanBalance = await page.evaluate(el => el.innerText, elements[10]);
-  console.log(`${loanBalance}`);
-
+  await context.close();
   await browser.close();
 })();
 
