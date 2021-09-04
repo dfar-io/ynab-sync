@@ -12,5 +12,5 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - &&\
     sudo apt-get install -y nodejs
 
-# Make
-RUN sudo apt-get install -y build-essential
+# Azure CLI
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash

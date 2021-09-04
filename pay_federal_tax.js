@@ -61,7 +61,11 @@ if (process.argv.length != 3) {
     // Step 4
     await page.click('button#discAuthModal_agree');
     await page.fill('#payment\\.sigFirstName', firstName);
-    await page.fill
+    await page.fill('#payment\\.sigLastName', lastName);
+    await page.fill('#payment\\.sigSsn', ssn);
+    await page.check('#authAgree');
+    await page.click('button#next');
+
     // Get the confirmation number and output it
     const confirmationNumber = await page.evaluate(el => el.innerText, await page.$('#eftID'));
     console.log(confirmationNumber);

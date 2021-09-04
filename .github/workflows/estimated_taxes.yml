@@ -50,3 +50,7 @@ jobs:
         state_amount=$(node get_category_percentage.js '${{ env.CATEGORY_GROUP }}' '${{ env.CATEGORY }}' ${{ env.STATE_PERCENTAGE }})
         echo $state_amount
         node pay_state_tax.js $state_amount
+    - name: Upload videos for failed run
+      if: ${{ failure() }}
+      run: |
+        az storage blob upload-batch --source video --destination videos --connection-string '${{ secrets.AZURE_STORAGE_CONN_STRING }}'
