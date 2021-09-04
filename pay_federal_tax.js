@@ -12,6 +12,13 @@ if (process.argv.length != 3) {
   const firstName = 'Dave';
   const lastName = 'Farinelli';
 
+  // More info: https://stackoverflow.com/a/16233919
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  });
+  const formattedAmount = formatter.format(amount);
+
   const browser = await webkit.launch();
   const context = await browser.newContext({
     recordVideo: { dir: 'video' }
@@ -47,8 +54,9 @@ if (process.argv.length != 3) {
     await page.click('button#next');
 
     // Step 3
-    await page.fill('#payment\\.paymentAmount', amount);
-    await page.fill('#payment\\.rePaymentAmount', amount);
+    
+    await page.fill('#payment\\.paymentAmount', formattedAmount);
+    await page.fill('#payment\\.rePaymentAmount', formattedAmount);
     await page.fill('#payment\\.account\\.routingNumber', envVars.ROUTING_NUMBER);
     await page.fill('#payment\\.account\\.accountNumber', envVars.ACCOUNT_NUMBER);
     await page.fill('#payment\\.account\\.reAccountNumber', envVars.ACCOUNT_NUMBER);
@@ -62,7 +70,7 @@ if (process.argv.length != 3) {
     await page.click('button#discAuthModal_agree');
     await page.fill('#payment\\.sigFirstName', firstName);
     await page.fill('#payment\\.sigLastName', lastName);
-    await page.fill('#payment\\.sigSsn', ssn);
+    await page.fill('#payment\\.sigSsn', envVars.SSN);
     await page.check('#authAgree');
     await page.click('button#next');
 

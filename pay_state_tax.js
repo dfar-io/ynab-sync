@@ -21,7 +21,7 @@ if (process.argv.length != 3) {
   const browser = await webkit.launch();
   const context = await browser.newContext({
     recordVideo: { dir: 'video' },
-    viewport: { height: 3000, width: 3000 }
+    viewport: { height: 2000, width: 2000 }
   })
   const page = await context.newPage();
 
@@ -113,7 +113,7 @@ function getIteration(currentMonth) {
       return '1st';
     case 5:   // June
       return '2nd';
-    case 7:   // September
+    case 8:   // September
       return '3rd';
     default:
       throw new Error(`Invalid month provided to get iteration: ${currentMonth}`);
