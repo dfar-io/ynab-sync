@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       YNAB_ACCESS_TOKEN: ${{ secrets.YNAB_ACCESS_TOKEN }}
-      CATEGORY_GROUP: Planned
+      CATEGORY_GROUP: Main
       CATEGORY: '1099 Taxes'
       FEDERAL_PERCENTAGE: 76.5
       STATE_PERCENTAGE: 33.5
