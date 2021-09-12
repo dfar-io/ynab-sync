@@ -16,7 +16,7 @@ jobs:
       CATEGORY_GROUP: Main
       CATEGORY: '1099 Taxes'
       FEDERAL_PERCENTAGE: 76.5
-      STATE_PERCENTAGE: 33.5
+      STATE_PERCENTAGE: 23.5
       SSN: ${{ secrets.SSN }}
       ZIP_CODE: ${{ secrets.ZIP_CODE }}
       SPOUSE_SSN: ${{ secrets.SPOUSE_SSN }}
