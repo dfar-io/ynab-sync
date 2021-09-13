@@ -18,7 +18,7 @@ import { getBudgetAsync, getAccountAsync, ynabAPI, getCategoryGroupAsync, getCat
 
   unflaggedTransactions.forEach(async transaction => {
     const transactionAmount = transaction.amount;
-    const taxAmount = transactionAmount * taxPercentage;
+    const taxAmount = Math.round(transactionAmount * taxPercentage);
     console.log(`Adding ${taxAmount / 1000} from transaction amount ${transactionAmount / 1000}`)
     await addTaxAmountToCategoryAsync(budget.id, taxAmount);
     await markTransactionAsync(budget.id, transaction);
