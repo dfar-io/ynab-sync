@@ -24,22 +24,6 @@ jobs:
       run: npm i
     - name: Adjust LLC Taxes
       run: node adjust_llc_taxes.js
-    - name: Adjust mortgage
-      run: |
-        mortgage_value=$(node get_mortgage_balance.js)
-        echo $mortgage_value
-        node adjust_ynab_account.js Mortgage -$mortgage_value
-      env:
-        MORTGAGE_USERNAME: ${{ secrets.MORTGAGE_USERNAME }}
-        MORTGAGE_PASSWORD: ${{ secrets.MORTGAGE_PASSWORD }}
-        QUESTION_1: "${{ secrets.Q1 }}"
-        ANSWER_1: ${{ secrets.A1 }}
-        QUESTION_2: "${{ secrets.Q2 }}"
-        ANSWER_2: ${{ secrets.A2 }}
-        QUESTION_3: "${{ secrets.Q3 }}"
-        ANSWER_3: ${{ secrets.A3 }}
-        QUESTION_4: "${{ secrets.Q4 }}"
-        ANSWER_4: ${{ secrets.A4 }}
     - name: Adjust home value
       run: |
         home_value=$(node get_home_value.js ${{ secrets.HOME_URL }})
