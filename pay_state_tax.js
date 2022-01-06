@@ -1,5 +1,5 @@
 import { webkit } from 'playwright';
-import { getEnvVars } from './ynab-sync-lib.js';
+import { getEnvVars, getYear } from './ynab-sync-lib.js';
 
 if (process.argv.length != 3) {
   console.error('usage: node pay_state_tax.js <amount>');
@@ -93,16 +93,11 @@ if (process.argv.length != 3) {
 
 function getPaymentType() {
   const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-
-  // if January, get last year
-  const year = currentMonth === 0 ?
-    currentYear - 1 :
-    currentYear;
+  const year = getYear();
   
   var iteration = getIteration(currentMonth);
 
-  return `${year} Estimate ${iteration} quarter`;
+  return `${year.toString()} Estimate ${iteration} quarter`;
 }
 
 function getIteration(currentMonth) {

@@ -1,5 +1,5 @@
 import { webkit } from 'playwright';
-import { getEnvVars } from './ynab-sync-lib.js';
+import { getEnvVars, getYear } from './ynab-sync-lib.js';
 
 if (process.argv.length != 3) {
   console.error('usage: node pay_federal_tax.js <amount>');
@@ -11,6 +11,7 @@ if (process.argv.length != 3) {
   const amount = process.argv[2];
   const firstName = 'Dave';
   const lastName = 'Farinelli';
+  const year = getYear()
 
   // More info: https://stackoverflow.com/a/16233919
   const formatter = new Intl.NumberFormat('en-US', {
@@ -31,12 +32,12 @@ if (process.argv.length != 3) {
     // Step 1
     await page.selectOption('select#payment\\.selectedBoxOne', 'Estimated Tax');
     await page.selectOption('#payment\\.selectedBoxTwo', '1040ES (for 1040, 1040A, 1040EZ)');
-    await page.selectOption('#payment\\.selectedTaxYear', new Date().getFullYear().toString());
+    await page.selectOption('#payment\\.selectedTaxYear', year.toString());
     await page.click('button#next');
     await page.click('button.continue');
 
     // Step 2
-    await page.selectOption('select#filingTaxYear', (new Date().getFullYear() - 1).toString());
+    await page.selectOption('select#filingTaxYear', '2020'); // Hardcoded for now, hopefully this will work for a while
     await page.selectOption('select#selectedFilingStatus', '2');  // Married filed jointly
     await page.fill('#firstName', firstName);
     await page.fill('#lastName', lastName);

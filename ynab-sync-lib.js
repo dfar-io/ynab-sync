@@ -88,6 +88,18 @@ export function getEnvVars() {
     return envVars;
 }
 
+export function getYear() {
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+
+    // if January, get last year
+    const year = currentMonth === 0 ?
+        currentYear - 1 :
+        currentYear;
+
+    return year;
+}
+
 function getEntity(response, data_name, name) {
     const entity = response.data[data_name].find(a => a.name === name);
     if (entity == null)
