@@ -10,7 +10,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "form-data": "^4.0.0",
-    "node-fetch": "^1.7.3",
+    "node-fetch": "^2.6.7",
     "ynab": "^1.25.0"
   }
 }
