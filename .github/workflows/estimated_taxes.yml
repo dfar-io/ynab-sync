@@ -15,8 +15,8 @@ jobs:
       YNAB_ACCESS_TOKEN: ${{ secrets.YNAB_ACCESS_TOKEN }}
       CATEGORY_GROUP: Special
       CATEGORY: '1099 Taxes'
-      FEDERAL_PERCENTAGE: 76.5
-      STATE_PERCENTAGE: 23.5
+      FEDERAL_PERCENTAGE: 80
+      STATE_PERCENTAGE: 20
       SSN: ${{ secrets.SSN }}
       ZIP_CODE: ${{ secrets.ZIP_CODE }}
       SPOUSE_SSN: ${{ secrets.SPOUSE_SSN }}
