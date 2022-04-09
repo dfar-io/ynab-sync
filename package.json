@@ -5,7 +5,7 @@
     "postinstall": "npx playwright install-deps"
   },
   "devDependencies": {
-    "playwright": "^1.17.1"
+    "playwright": "^1.20.2"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
