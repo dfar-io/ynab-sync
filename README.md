@@ -1,7 +1,6 @@
 ![Daily Jobs](https://github.com/dfar-io/ynab-sync/actions/workflows/daily.yml/badge.svg)
 ![Monthly Jobs](https://github.com/dfar-io/ynab-sync/actions/workflows/monthly.yml/badge.svg)
 ![Estimated Taxes](https://github.com/dfar-io/ynab-sync/actions/workflows/estimated_taxes.yml/badge.svg)
-[![Maintainability](https://api.codeclimate.com/v1/badges/820cf2f0eae37e00b7dc/maintainability)](https://codeclimate.com/github/dfar-io/ynab-sync/maintainability)
 
 # YNAB Sync
 
