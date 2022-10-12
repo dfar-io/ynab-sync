@@ -17,7 +17,7 @@ if (process.argv.length != 3) {
   try {
     await page.goto(`https://www.trulia.com/p/${url}`);
 
-    const homeValue = await page.evaluate(el => el.innerText, await page.$('.nBoMt'));
+    const homeValue = await page.evaluate(el => el.innerText, await page.$('.cikoTb'));
     console.log(homeValue.replace('$', '').replace(',', ''));
   } catch (err) {
     await context.close();
