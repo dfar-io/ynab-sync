@@ -1,5 +1,4 @@
-// When running this in non-prod, you may want to set up a
-// .env file to simulate the required environment files.
+// This file no longer in use since mortgage is paid off
 
 import { webkit } from 'playwright';
 import { verifyEnvVars } from './ynab-sync-lib.js';
