@@ -28,28 +28,42 @@ import { verifyEnvVars } from './ynab-sync-lib.js';
     await page.click('a#cart-contents-main-button');
 
     // Payment screen
-    // stuck here so far, need another way to click
-    await page.check('input#echeck');
+    await page.click('div#radio_wrapper_echeck');
 
     await page.fill('#payment_method_first_name', firstName);
     await page.fill('#payment_method_last_name', lastName);
-    // How do I get the account type?
+
+    await page.click('div.desktop-select');
     await page.click('p#personal_checking_option');
+
     await page.fill('#payment_method_routing_number', envVars.ROUTING_NUMBER);
     await page.fill('#payment_method_account_number', envVars.ACCOUNT_NUMBER);
     await page.fill('#account_number_confirmation', envVars.ACCOUNT_NUMBER);
 
     await page.fill('#payment_method_street_address', envVars.STREET_ADDRESS);
-    // How do I get the state?
+    await page.click('div#payment_method_state_select');
+    await page.click('p#MI_option');
     await page.fill('#payment_method_city', envVars.CITY);
     await page.fill('#payment_method_zip', envVars.ZIP_CODE);
     await page.fill('#payment_method_email', envVars.EMAIL);
+    await page.click('input#payment-method-submit');
 
-    // Step 4
+    // Confirmation
+    // Click agree (won't work with Playwright for some reason)
+    await page.waitForTimeout(5000);
+    await page.evaluate(() => {
+      document.querySelector('input#agree').click();
+    });
+    await page.click('button.btn-primary');
+    // Takes a long time to confirm the order
+    await page.waitForTimeout(30000);
 
-    // Get the confirmation number and output it
-    // const confirmationNumber = await page.evaluate(el => el.innerText, await page.$('#eftID'));
-    // console.log(confirmationNumber);
+    // Not sure exactly how to get confirmation yet,
+    // next time we try running this, watch the video and look for correct text
+    const confirmationText = await page.$$("text='Delete'");
+    if (confirmationText.length == 0) {
+      throw new Error('unable to get confirmation.');
+    }
   } catch (err) {
     await context.close();
     throw err;
