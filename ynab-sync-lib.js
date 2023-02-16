@@ -16,7 +16,12 @@ export async function getBudgetAsync() {
 }
 
 export async function getAccountAsync(budget_id, account_name) {
-    const accountsResponse = await ynabAPI.accounts.getAccounts(budget_id);
+    const accountsResponse = await ynabAPI.accounts.getAccounts(budget_id)
+        .catch(e => {
+            console.error('Unable to get account.');
+            console.error(e);
+            process.exit(1);
+        });;
     return getEntity(accountsResponse, 'accounts', account_name);
 }
 
