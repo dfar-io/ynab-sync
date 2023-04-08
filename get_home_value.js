@@ -1,7 +1,9 @@
+// Uses Trulia to get home value
+
 import { webkit } from 'playwright';
 
-if (process.argv.length != 3) {
-  console.error('usage: node get_home_value.js <url>');
+if (process.argv.length != 2) {
+  console.error('usage: node get_home_value.js');
   process.exit(1);
 }
 
@@ -11,13 +13,12 @@ if (process.argv.length != 3) {
     recordVideo: { dir: 'video' }
   })
   const page = await context.newPage();
-
-  const url = process.argv[2];
+  const url = process.env.HOME_URL;
 
   try {
-    await page.goto(`https://www.trulia.com/p/${url}`);
+    await page.goto(url);
 
-    const homeValue = await page.evaluate(el => el.innerText, await page.$('.cikoTb'));
+    const homeValue = await page.evaluate(el => el.innerText, await page.$('.jrMHya'));
     console.log(homeValue.replace('$', '').replace(',', ''));
   } catch (err) {
     await context.close();
