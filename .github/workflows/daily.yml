@@ -4,10 +4,6 @@ on:
   schedule:
     - cron:  '0 0 * * *'
   workflow_dispatch:
-
-env:
-  NODE_VERSION: '16.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
-
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -15,17 +11,23 @@ jobs:
       YNAB_ACCESS_TOKEN: ${{ secrets.YNAB_ACCESS_TOKEN }}
     steps:
     - name: 'Checkout GitHub Action'
-      uses: actions/checkout@v2
-    - name: Setup Node ${{ env.NODE_VERSION }} Environment
-      uses: actions/setup-node@v1
+      uses: actions/checkout@v3
+    - name: Setup Node Environment
+      uses: actions/setup-node@v3
       with:
-        node-version: ${{ env.NODE_VERSION }}
+        node-version: '16.x'
     - name: Install dependencies
       run: npm i
     - name: Adjust LLC Taxes
       run: node adjust_llc_taxes.js
     - name: Adjust home value
       run: |
-        home_value=$(node get_home_value.js ${{ secrets.HOME_URL }})
+        home_value=$(node get_home_value.js)
         echo $home_value
         node adjust_ynab_account.js Home $home_value
+      env:
+        HOME_URL: ${{ secrets.HOME_URL }})
+    - uses: actions/upload-artifact@v3
+      if: ${{ failure() }}
+      with:
+        path: video/*
