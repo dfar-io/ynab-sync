@@ -26,7 +26,7 @@ import { getBudgetAsync, getAccountAsync, ynabAPI, getCategoryGroupAsync, getCat
 })();
 
 async function addTaxAmountToCategoryAsync(budget_id, taxAmount) {
-  const categoryGroup = await getCategoryGroupAsync(budget_id, 'Special');
+  const categoryGroup = await getCategoryGroupAsync(budget_id, 'Large Payments');
   const category = await getCategoryAsync(categoryGroup, '1099 Taxes');
   category.budgeted = category.budgeted + taxAmount;
   await ynabAPI.categories.updateMonthCategory(
