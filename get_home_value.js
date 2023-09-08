@@ -1,4 +1,4 @@
-// Uses Trulia to get home value
+// Uses Redfin to get home value
 
 import { webkit } from 'playwright';
 
@@ -13,12 +13,13 @@ if (process.argv.length != 2) {
     recordVideo: { dir: 'video' }
   })
   const page = await context.newPage();
-  const url = process.env.HOME_URL;
+  //const url = process.env.HOME_URL;
+  const url = 'https://www.redfin.com/MI/West-Bloomfield/2258-Holton-Ln-48323/home/93862019';
 
   try {
     await page.goto(url);
 
-    const homeValue = await page.evaluate(el => el.innerText, await page.$('.jrMHya'));
+    const homeValue = await page.evaluate(el => el.innerText, await page.$('div.statsValue > span'));
     console.log(homeValue.replace('$', '').replace(',', ''));
   } catch (err) {
     await context.close();

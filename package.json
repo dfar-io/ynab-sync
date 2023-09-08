@@ -5,7 +5,7 @@
     "postinstall": "npx playwright install-deps"
   },
   "devDependencies": {
-    "playwright": "^1.32.2"
+    "playwright": "^1.37.1"
   },
   "dependencies": {
     "form-data": "^4.0.0",
