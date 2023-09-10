@@ -43,7 +43,7 @@ if (process.argv.length != 3) {
 
     // Page 3
     await waitThenFillAsync(page, 'input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_1__text', firstName);
-    await waitThenFillAsync(page, 'input#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_4__text', envVars.SPOUSE_FIRST_NAME);
+    // spouse first name no longer needed as of 2023.09.10
     await page.selectOption('#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_5__value', getPaymentType());
     await page.selectOption('#compressedPaymentForm_enterPaymentInformationForm_displayedNonSummableParamList_6__value',  ' Yes, e-filed');
     await waitThenFillAsync(page, 'input#compressedPaymentForm_enterPaymentInformationForm_singlePaymentAmount', amount);
