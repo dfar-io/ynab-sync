@@ -25,16 +25,22 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: Install dependencies
       run: npm i
+    - name: Adjust home value
+      run: |
+        home_value=$(node get_home_value.js)
+        echo $home_value
+        node adjust_ynab_account.js Home $home_value
     - name: Adjust CX-3 value
       run: |
         car1_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }})
         echo $car1_value
         node adjust_ynab_account.js CX-3 $car1_value
-    - name: Adjust Stelvio value
-      run: |
-        car2_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN2 }})
-        echo $car2_value
-        node adjust_ynab_account.js Stelvio $car2_value
+    # TODO: Convert this to CX-5
+    # - name: Adjust Stelvio value
+    #   run: |
+    #     car2_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN2 }})
+    #     echo $car2_value
+    #     node adjust_ynab_account.js Stelvio $car2_value
     - name: Send invoice
       run: |
         node send_invoice.js
