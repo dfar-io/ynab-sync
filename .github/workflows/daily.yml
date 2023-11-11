@@ -20,13 +20,6 @@ jobs:
       run: npm i
     - name: Adjust LLC Taxes
       run: node adjust_llc_taxes.js
-    - name: Adjust home value
-      run: |
-        home_value=$(node get_home_value.js)
-        echo $home_value
-        node adjust_ynab_account.js Home $home_value
-      env:
-        HOME_URL: ${{ secrets.HOME_URL }})
     - uses: actions/upload-artifact@v3
       if: ${{ failure() }}
       with:
