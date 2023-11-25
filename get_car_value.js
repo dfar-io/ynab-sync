@@ -1,3 +1,6 @@
+// To call the API directly
+// curl https://api.carsxe.com/marketvalue?key=API_KEY&vin=VIN
+
 import fetch from 'node-fetch';
 
 if (process.argv.length != 4) {
