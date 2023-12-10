@@ -2,7 +2,7 @@ import { getBudgetAsync, getAccountAsync, ynabAPI, getCategoryGroupAsync, getCat
   
 (async function() {
   // This should be the percent taken between both federal and state
-  const taxPercentage = 0.50;
+  const taxPercentage = 0.40;
   
   const budget = await getBudgetAsync();
   const account = await getAccountAsync(budget.id, 'LLC');
