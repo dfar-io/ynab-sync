@@ -39,7 +39,7 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: Install dependencies
-      run: npm i
+      run: npm i && npx playwright install
     - name: Pay federal tax
       run: |
         federal_amount=$(node get_category_percentage.js '${{ env.CATEGORY_GROUP }}' '${{ env.CATEGORY }}' ${{ env.FEDERAL_PERCENTAGE }})
