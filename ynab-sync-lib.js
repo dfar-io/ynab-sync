@@ -79,7 +79,7 @@ export function getEnvVars() {
       ROUTING_NUMBER: process.env.ROUTING_NUMBER,
       ACCOUNT_NUMBER: process.env.ACCOUNT_NUMBER,
       PHONE_NUMBER: process.env.PHONE_NUMBER,
-      EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
+      EMAIL: process.env.EMAIL,
       STREET_ADDRESS: process.env.STREET_ADDRESS,
       CITY: process.env.CITY,
       STATE_ABBV: process.env.STATE_ABBV,

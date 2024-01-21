@@ -24,7 +24,7 @@ jobs:
       ROUTING_NUMBER: ${{ secrets.ROUTING_NUMBER }}
       ACCOUNT_NUMBER: ${{ secrets.ACCOUNT_NUMBER }}
       PHONE_NUMBER: ${{ secrets.PHONE_NUMBER }}
-      EMAIL_: ${{ secrets.EMAIL_ADDRESS }}
+      EMAIL_: ${{ secrets.EMAIL }}
       STREET_ADDRESS: '${{ secrets.STREET_ADDRESS }}'
       CITY: '${{ secrets.CITY }}'
       STATE_ABBV: ${{ secrets.STATE_ABBV }}

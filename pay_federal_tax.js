@@ -63,8 +63,8 @@ if (process.argv.length != 3) {
     await page.fill('#payment\\.account\\.reAccountNumber', envVars.ACCOUNT_NUMBER);
     await page.check('text=Checking');
     await page.check('#optedForEmail');
-    await page.fill('#emailAddress', envVars.EMAIL_ADDRESS);
-    await page.fill('#reEmailAddress', envVars.EMAIL_ADDRESS);
+    await page.fill('#emailAddress', envVars.EMAIL);
+    await page.fill('#reEmailAddress', envVars.EMAIL);
     await page.click('button#next');
 
     // Step 4
