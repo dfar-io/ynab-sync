@@ -15,5 +15,5 @@ if (process.argv.length != 4) {
   const response = await fetch(`https://api.carsxe.com/marketvalue?key=${api_key}&vin=${vin}`);
   const responseJson = await response.json();
 
-  console.log(responseJson.roughTradeIn);
+  console.log(responseJson.averageTradeIn);
 })();

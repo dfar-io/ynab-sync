@@ -3,7 +3,7 @@ export const ynabAPI = new ynab.API(process.env.YNAB_ACCESS_TOKEN);
 export { ynab };
 
 export async function getBudgetAsync() {
-    const budgetName = 'Budget'
+    const budgetName = 'Main'
     const budgetsResponse = await ynabAPI.budgets.getBudgets()
         .catch(e => {
             console.error(e);

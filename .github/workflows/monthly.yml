@@ -37,12 +37,11 @@ jobs:
         car1_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }})
         echo $car1_value
         node adjust_ynab_account.js CX-3 $car1_value
-    # TODO: Enable this if data is available
-    # - name: Adjust CX-5 value
-    #   run: |
-    #     car2_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN2 }})
-    #     echo $car2_value
-    #     node adjust_ynab_account.js CX-5 $car2_value
+    - name: Adjust CX-5 value
+      run: |
+        car2_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN2 }})
+        echo $car2_value
+        node adjust_ynab_account.js CX-5 $car2_value
     - name: Send invoice
       run: |
         node send_invoice.js
