@@ -23,14 +23,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - name: Install dependencies
-      run: |
-        npm i
-        npx playwright install
-    - name: Get home value
-      run: |
-        home_value=$(node get_home_value.js)
-        echo $home_value
     - name: Get CX-3 value
       run: |
         car1_value=$(node get_car_value.js ${{ secrets.CAR_API_KEY }} ${{ secrets.VIN1 }})
